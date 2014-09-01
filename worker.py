@@ -11,7 +11,7 @@ def block_opreturns_to_db(blockn):
 
   for x in data:
     txhash=str(x[0])
-    message=str(x[1])
+    message=str(x[1]).decode('utf-8','ignore')
     k=add_message_to_db(message, str(blockn), txhash)
     print k
   db.dbexecute("UPDATE META SET lastblockdone='" + str(blockn)+"';",False)
