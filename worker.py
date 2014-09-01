@@ -68,7 +68,6 @@ from flask import make_response
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS']=True
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']  #"postgresql://localhost/"+dbname
 
 import thread
 
