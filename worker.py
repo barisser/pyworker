@@ -53,9 +53,31 @@ def moreblocks(number):
 
 import time
 
-start=time.time()
-interval=30
-while True:
-  if time.time()>=interval+start:
-    start=time.time()
-    moreblocks(30)
+def work():
+  start=time.time()
+  interval=30
+  while True:
+    if time.time()>=interval+start:
+      start=time.time()
+      moreblocks(30)
+
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask import request
+from flask import make_response
+
+app = Flask(__name__)
+app.config['PROPAGATE_EXCEPTIONS']=True
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']  #"postgresql://localhost/"+dbname
+
+import thread
+
+@app.route('/')
+def something():
+  response=make_response("Hey there!", 200)
+  response.headers['Access-Control-Allow-Origin']= '*'
+  return response
+
+if __name__ == '__main__':
+    thread.start_new_thread(app.run())
+    thread.start_new_thread(work())
