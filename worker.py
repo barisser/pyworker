@@ -15,7 +15,8 @@ def parse(message):
 
 
 def add_message_to_db(message, block, txhash):
-  dbstring="INSERT INTO MESSAGES (message, block, txhash) VALUES ('"+str(message)+"','"+str(block)+"','"+str(txhash)+"');"
+  dbstring = "INSERT INTO MESSAGES (message, block, txhash) VALUES ('" +str(message)+"','"+str(block)+"','"+str(txhash)+"');"
+  print dbstring
   response=db.dbexecute(dbstring, False)
   return response
 
