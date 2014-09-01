@@ -61,4 +61,4 @@ def work():
       start=time.time()
       moreblocks(30)
 
-#work()
+work()
