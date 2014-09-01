@@ -2,7 +2,7 @@ import db
 import bitsource
 
 def add_message_to_db(message, block, txhash):
-  dbstring="INSERT INTO MESSAGES (message, block, txhash) VALUES ("+str(message)+","+str(block)+","+str(txhash)+");"
+  dbstring="INSERT INTO MESSAGES (message, block, txhash) VALUES ('"+str(message)+"','"+str(block)+"','"+str(txhash)+"');"
   response=db.dbexecute(dbstring, True)
   return response
 
