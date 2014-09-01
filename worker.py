@@ -14,4 +14,4 @@ def block_opreturns_to_db(blockn):
     message=x[1]
     k=add_message_to_db(message, blockn, txhash)
     print k
-  
+  db.dbexecute("UPDATE META SET lastblockdone='" + str(blockn)+"';",False)
