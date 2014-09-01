@@ -4,10 +4,12 @@ import bitsource
 def parse(message):
   a=[]
   for x in message:
-    if ord(x)<128:
-      a.append(ord(x))
-    else:
+    j=ord(x)
+    if j<48 or (j>57 and j<65) or (j>90 and j<96) or j>122:
       a.append(63)
+    else:
+      a.append(ord(x))
+
   c=""
   for b in a:
     c=c+chr(b)
@@ -15,7 +17,7 @@ def parse(message):
 
 
 def add_message_to_db(message, block, txhash):
-  dbstring = "INSERT INTO MESSAGES (message, block, txhash) VALUES ('" +str(message)+"','"+str(block)+"','"+str(txhash)+"');"
+  dbstring = "INSERT INTO MESSAGES (message, block, txhash) VALUES ('"+str(message)+"','"+str(block)+"','"+str(txhash)+"');"
   print dbstring
   response=db.dbexecute(dbstring, False)
   return response
