@@ -29,7 +29,10 @@ def block_opreturns_to_db(blockn):
   for x in data:
     txhash=str(x[0])
     message=parse(str(x[1]))
+    if len(message)>40:
+      message=message[0:40]
     print message
+
     k=add_message_to_db(message, str(blockn), txhash)
     print k
   db.dbexecute("UPDATE META SET lastblockdone='" + str(blockn)+"';",False)
