@@ -1,5 +1,6 @@
 import db
 import bitsource
+import requests
 
 def parse(message):
   a=[]
@@ -32,3 +33,26 @@ def block_opreturns_to_db(blockn):
     k=add_message_to_db(message, str(blockn), txhash)
     print k
   db.dbexecute("UPDATE META SET lastblockdone='" + str(blockn)+"';",False)
+
+def moreblocks(number):
+  lastblock=db.dbexecute("SELECT * FROM META;",True)
+  lastblock=lastblock[0][0]
+  currentblock=int(requests.get("https://blockchain.info/q/getblockcount").content)
+
+  endtarget=lastblock+number
+  if endtarget>currentblock:
+    endtarget=currentblock
+
+  for i in range(lastblock+1, endtarget+1):
+    block_opreturns_to_db(i)
+    print "processed block "+str(i)+" for opreturns"
+
+
+import time
+
+start=time.time()
+interval=30
+while True:
+  if time.time()>=interval+start:
+    start=time.time()
+    moreblocks(30)
