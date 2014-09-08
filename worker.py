@@ -62,4 +62,5 @@ def work():
       start=time.time()
       moreblocks(30)
 
-work()
+if __name__ == '__main__':
+    work()
