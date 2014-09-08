@@ -6,9 +6,9 @@ def parse(message):
   a=[]
   for x in message:
     j=ord(x)
-    #if j<48 or (j>57 and j<65) or (j>90 and j<96) or j>122:
-    if j>127 or j==96 or j==39 or j==34:
-      a.append(63)
+    if (j>33 and j<48) or (j>57 and j<65) or (j>90 and j<96) or j>122:
+    #if j>127 or j==96 or j==92 or j==39 or j==34 or j==58 or j==59 or:
+      a.append(95)
     else:
       a.append(ord(x))
 
