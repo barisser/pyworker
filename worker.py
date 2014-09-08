@@ -6,7 +6,8 @@ def parse(message):
   a=[]
   for x in message:
     j=ord(x)
-    if j<48 or (j>57 and j<65) or (j>90 and j<96) or j>122:
+    #if j<48 or (j>57 and j<65) or (j>90 and j<96) or j>122:
+    if j>127:
       a.append(63)
     else:
       a.append(ord(x))
@@ -28,8 +29,8 @@ def block_opreturns_to_db(blockn):
 
   for x in data:
     txhash=str(x[0])
-    #message=parse(str(x[1]))
-    message=str(x[1])
+    message=parse(str(x[1]))
+    #message=str(x[1])
     if len(message)>40:
       message=message[0:40]
     print message
