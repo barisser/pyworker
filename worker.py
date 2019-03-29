@@ -38,10 +38,10 @@ def block_opreturns_to_db(blockn):
 
     k=add_message_to_db(message, str(blockn), txhash)
     print k
-  db.dbexecute("UPDATE META SET lastblockdone='" + str(blockn)+"';",False)
+  db.dbexecute("UPDATE META SET lastblockdone='" + str(blockn)+"';", False)
 
 def moreblocks(number):
-  lastblock=db.dbexecute("SELECT * FROM META;",True)
+  lastblock=db.dbexecute("SELECT * FROM META;", True)
   lastblock=lastblock[0][0]
   currentblock=int(requests.get("https://blockchain.info/q/getblockcount").content)
 
