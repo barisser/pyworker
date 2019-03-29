@@ -27,11 +27,13 @@ def base58encode(n):
         n /= 58
     return result
 
+
 def base256decode(s):
     result = 0
     for c in s:
         result = result * 256 + ord(c)
     return result
+
 
 def countLeadingChars(s, ch):
     count = 0
@@ -43,6 +45,8 @@ def countLeadingChars(s, ch):
     return count
 
 # https://en.bitcoin.it/wiki/Base58Check_encoding
+
+
 def base58CheckEncode(version, payload):
     s = chr(version) + payload
     checksum = hashlib.sha256(hashlib.sha256(s).digest()).digest()[0:4]
@@ -50,28 +54,35 @@ def base58CheckEncode(version, payload):
     leadingZeros = countLeadingChars(result, '\0')
     return '1' * leadingZeros + base58encode(base256decode(result))
 
+
 def privateKeyToWif(key_hex):
     return base58CheckEncode(0x80, key_hex.decode('hex'))
+
 
 def privateKeyToPublicKey(s):
     sk = ecdsa.SigningKey.from_string(s.decode('hex'), curve=ecdsa.SECP256k1)
     vk = sk.verifying_key
     return ('\04' + sk.verifying_key.to_string()).encode('hex')
 
+
 def pubKeyToAddr(s):
     ripemd160 = hashlib.new('ripemd160')
     ripemd160.update(hashlib.sha256(s.decode('hex')).digest())
     return base58CheckEncode(0, ripemd160.digest())
 
+
 def keyToAddr(s):
     return pubKeyToAddr(privateKeyToPublicKey(s))
 
 # Generate a random private key
+
+
 def generate_subkeys():
     a=[]
     a.append(os.urandom(subkey_complexity).encode('hex')) #subkey1
     a.append(os.urandom(subkey_complexity).encode('hex')) #subkey2
     return a
+
 
 def generate_privatekey(subkey1,subkey2):
     keysum=subkey1+subkey2
@@ -80,11 +91,13 @@ def generate_privatekey(subkey1,subkey2):
     privkey=privateKeyToWif(secret_exponent)
     return privkey
 
+
 def generate_publicaddress(subkey1,subkey2):
     keysum=subkey1+subkey2
     secret_exponent=hashlib.sha256(keysum).hexdigest()
     address=keyToAddr(secret_exponent)
     return address
+
 
 def generate_receiving_address(destination_address):
     global g,r
@@ -120,12 +133,14 @@ class subkeypair:
     def private_key(self):
         return generate_privatekey(self.subkey1,self.subkey2)
 
+
 def roundfloat(s, decimals):
     n=s
     n=n*math.pow(10,decimals)
     n=int(n)
     n=float(n/math.pow(10,decimals))
     return n
+
 
 def split_logarithmically(amt,base, min):
     global r,s
@@ -154,6 +169,7 @@ def split_logarithmically(amt,base, min):
     #print v
     return a
 
+
 def split_n(amt,base,min):
     r=int(math.log(amt/min,base))
     a=[0]*(r+1)
@@ -173,6 +189,7 @@ def split_n(amt,base,min):
         if s<1 and s>0:
            s=-1
     return v
+
 
 def assemble_logarithmically(amt,base,min, storedset):
     s=amt
@@ -201,6 +218,7 @@ def assemble_logarithmically(amt,base,min, storedset):
 
 #a=split_logarithmically(100,2,1)
 
+
 def convert_to_base(x,base):
     a=''
     n=30
@@ -220,6 +238,7 @@ def convert_to_base(x,base):
         n=n-1
 
     return a
+
 
 class user:
    name=''
@@ -340,6 +359,7 @@ class user:
                sent=sent+fromthisoneamt
             h=h+1
 
+
 def isinside(small,big):
     a=len(small)
     b=len(big)
@@ -356,6 +376,7 @@ def isinside(small,big):
 
     return found
 
+
 def find_vanity(vanity,n):
     k=math.pow(26,n)
     a=0
@@ -368,6 +389,7 @@ def find_vanity(vanity,n):
             print "secret exponent: "+str(d)
             print "public address: "+str(b)
         a=a+1
+
 
 def send_transaction(fromaddress,amount,destination, fee, privatekey):
     #try:
@@ -408,6 +430,7 @@ def send_transaction(fromaddress,amount,destination, fee, privatekey):
         #    print b.content
     #except:
      #   print "failed"
+
 
 def send_many(fromaddr,outputs,destinations,fee, subkey1,subkey2, secretexponent):
    global outs,inp, tx, tx2,totalin,b,amounts, totalout
@@ -455,6 +478,7 @@ def send_many(fromaddr,outputs,destinations,fee, subkey1,subkey2, secretexponent
    #tx2=sign(tx,0,priv)
    pushtx(tx2)
 
+
 def make_info_script(info):
    global f
    #OP RETURN SCRIPT
@@ -474,6 +498,8 @@ def make_info_script(info):
 
 #MAX 75 bytes in info
 #TX not being accepted by blockchain.info
+
+
 def send_with_info(fromaddr,amt,destination, fee, secretexponent, info, privkey):
    global outs,inp, tx, tx2,totalin,b,amounts, ins,unspentbtc, detx
    amounts=[]
@@ -565,8 +591,10 @@ def send(fromaddr, amt, destination, fee, subkey1, subkey2):
 def hex_to_address(hex):
     return hex_to_b58check(hex,0)
 
+
 def address_to_hex(addr):
     return b58check_to_hex(addr)
+
 
 def text_to_addrset(text):
    a=text.encode('hex')
