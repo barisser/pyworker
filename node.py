@@ -9,6 +9,7 @@ url=os.environ['node_url']
 username=os.environ['node_username']
 password=os.environ['node_password']
 
+
 def connect(command,params):
   connect_url='https://'+url#+':'+node_port
   headers={'content-type':'application/json'}
