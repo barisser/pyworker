@@ -1,13 +1,16 @@
 import hashlib
 
+
 def ripemd160_encode(n):
   m=hashlib.new('ripemd160')
   m.update(n)
   return m.hexdigest()
 
+
 def hash160(n):
   m=ripemd160_encode(n)
   return hashlib.sha256(m).hexdigest()
+
 
 def ripehash(hexstring):
     a=hexstring.decode('hex')
@@ -29,6 +32,8 @@ def int_to_binary(n):
   return r
 
 #SEPARATE INTEGER INTO BINARY BATCHES of 7
+
+
 def make_batches(n):
   b=int_to_binary(n)
   g=len(b)%7
@@ -53,6 +58,8 @@ def make_batches(n):
   return output
 
 #Add zeros and ones to binary batches of 7 (to make batches of 8)
+
+
 def addzeros(n):
   b=make_batches(n)
   output=[]
@@ -68,12 +75,16 @@ def addzeros(n):
   return output
 
 #integer to binary set
+
+
 def encode(n):
   a=addzeros(n)
   a.reverse()
   return a
 
 #integer to hex set
+
+
 def hexencode(n):
   a=encode(n)
   g=''
@@ -94,6 +105,7 @@ def decode(n):
     a=r+a
   return int(a,2)
 
+
 def hexpiecetobinary(hex):
   #print hex
   try:
@@ -105,6 +117,7 @@ def hexpiecetobinary(hex):
   #for i in range(0,g):
   #  a='0'+a
   return a
+
 
 def hexdecode(n):
   a=[]
@@ -131,6 +144,7 @@ def hexdecodeline(n):
   for x in a:
     d.append(hexpiecetobinary(x))
   return d
+
 
 def hexdecodeset(n):
   a=[]
