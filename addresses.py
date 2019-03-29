@@ -153,7 +153,7 @@ def read_opreturns_sent_by_address(publicaddress):
     try:
       intversion=int(x)
       #print intversion
-      results.append([intversion,strin])
+      results.append([intversion, strin])
     except:
       a=0
   answer=''
@@ -215,7 +215,7 @@ def int_to_phrase(intcheck):
 
 import math
 def check_int_range(loglimit):
-  a=math.pow(58,loglimit)
+  a=math.pow(58, loglimit)
   b=0
   while b<a:
     strin=int_to_phrase(b)
