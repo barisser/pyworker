@@ -5,6 +5,7 @@ import leb128
 import node
 import cointools
 
+
 def getblockmeta(n):
   #get hash of block at height n
   blockhash=node.connect('getblockhash',[n])
@@ -12,14 +13,17 @@ def getblockmeta(n):
   blockdata=node.connect('getblock',[blockhash])
   return blockdata
 
+
 def getrawtx(txhash):
   txdata=node.connect('getrawtransaction',[txhash])
   return txdata
+
 
 def tx_lookup(txhash):
    #print txhash
    c=node.connect('getrawtransaction',[txhash,1])
    return c
+
 
 def tx_inputs(txhash):
   txdata=tx_lookup(txhash)
@@ -55,11 +59,13 @@ def tx_inputs(txhash):
 
   return answer
 
+
 def gettx(txhash):
   a=tx_lookup(txhash)
   b=tx_inputs(txhash)
   c= dict(a.items() + b.items())
   return c
+
 
 def txs_in_block(n):
   starttime=time.time()
@@ -80,6 +86,7 @@ def script_to_coloraddress(script):
   ripehash=leb128.ripehash(script)
   answer=cointools.base58CheckEncode(0x05, ripehash.decode('hex'))
   return answer
+
 
 def color_address(publicaddress):
   a=requests.get('https://blockexplorer.com/q/addresstohash/')
@@ -104,6 +111,7 @@ def read_tx(txhash):
       #return -1
   return m, v
 
+
 def op_return_in_block(n):
   blockmeta=getblockmeta(n)
   txhashes=blockmeta['tx']
@@ -116,6 +124,7 @@ def op_return_in_block(n):
     if not m==-1:
       messages.append([tx,m,n[1]])
   return messages
+
 
 def opreturns_in_block_blockchain(n):
   a=requests.get("http://blockchain.info/block-height/"+str(n)+"?format=json").content
@@ -133,6 +142,7 @@ def opreturns_in_block_blockchain(n):
         script=script.decode("hex")
         answers.append([tx['hash'],script])
   return answers
+
 
 def parse_colored_tx(metadata, txhash_with_index):
   global d,e,g, count,f, hexmetadata
@@ -211,6 +221,7 @@ def parse_colored_tx(metadata, txhash_with_index):
 
 
   return results
+
 
 def write_metadata(asset_quantities, otherdata):
   #PLAINTEXT SCRIPT TO BE ENCODED INTO OP RETURN using Transaction.make_info_script
