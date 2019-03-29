@@ -12,6 +12,7 @@ b58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 secure_key_length=60
 
+
 def base58encode(n):
     result = ''
     while n > 0:
@@ -19,11 +20,13 @@ def base58encode(n):
         n /= 58
     return result
 
+
 def base256decode(s):
     result = 0
     for c in s:
         result = result * 256 + ord(c)
     return result
+
 
 def countLeadingChars(s, ch):
     count = 0
@@ -35,6 +38,8 @@ def countLeadingChars(s, ch):
     return count
 
 # https://en.bitcoin.it/wiki/Base58Check_encoding
+
+
 def base58CheckEncode(version, payload):
     s = chr(version) + payload
     checksum = hashlib.sha256(hashlib.sha256(s).digest()).digest()[0:4]
@@ -42,28 +47,35 @@ def base58CheckEncode(version, payload):
     leadingZeros = countLeadingChars(result, '\0')
     return '1' * leadingZeros + base58encode(base256decode(result))
 
+
 def privateKeyToWif(key_hex):
     return base58CheckEncode(0x80, key_hex.decode('hex'))
+
 
 def privateKeyToPublicKey(s):
     sk = ecdsa.SigningKey.from_string(s.decode('hex'), curve=ecdsa.SECP256k1)
     vk = sk.verifying_key
     return ('\04' + sk.verifying_key.to_string()).encode('hex')
 
+
 def pubKeyToAddr(s):
     ripemd160 = hashlib.new('ripemd160')
     ripemd160.update(hashlib.sha256(s.decode('hex')).digest())
     return base58CheckEncode(0, ripemd160.digest())
 
+
 def keyToAddr(s):
     return pubKeyToAddr(privateKeyToPublicKey(s))
 
 # Generate a random private key
+
+
 def generate_subkeys():
     a=[]
     a.append(os.urandom(subkey_complexity).encode('hex')) #subkey1
     a.append(os.urandom(subkey_complexity).encode('hex')) #subkey2
     return a
+
 
 def generate_privatekey(phrase):
     keysum=phrase
@@ -72,16 +84,19 @@ def generate_privatekey(phrase):
     privkey=privateKeyToWif(secret_exponent)
     return privkey
 
+
 def generate_publicaddress(phrase):
     keysum=phrase
     secret_exponent=hashlib.sha256(keysum).hexdigest()
     address=keyToAddr(secret_exponent)
     return address
 
+
 def getunspent(publicaddress):  #REPLACE SOMEDAY WITH LOCAL
   url= "https://blockchain.info/unspent?active="+publicaddress
   a=requests.get(url)
   return json.loads(a.content)['unspent_outputs']
+
 
 def txs_received_by_address(publicaddress):
   global transactions
@@ -102,6 +117,7 @@ def txs_received_by_address(publicaddress):
       receivedtxs.append(tx)
 
   return receivedtxs
+
 
 def txs_sent_by_address(publicaddress):
   url='http://blockchain.info/address/'+str(publicaddress)+'?format=json'
@@ -138,6 +154,7 @@ def find_opreturns_sent_by_address(publicaddress):
         r.append(txidentifier)
         scriptlist.append(r)
   return scriptlist
+
 
 def read_opreturns_sent_by_address(publicaddress):
   readdata=find_opreturns_sent_by_address(publicaddress)
@@ -179,6 +196,7 @@ def generate_secure_pair():
   results['private_key']=private
   return results
 
+
 def unspent_value(public_address):
   unspents=unspent(public_address)
   value=0.0
@@ -192,6 +210,8 @@ def unspent_value(public_address):
 b58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 import cointools
+
+
 def checkphrase(phrase):
   a=generate_publicaddress(phrase)
   r=cointools.unspent(a)
@@ -199,6 +219,7 @@ def checkphrase(phrase):
     print r
     print phrase
     return phrase
+
 
 def int_to_phrase(intcheck):
   r=intcheck
@@ -214,6 +235,8 @@ def int_to_phrase(intcheck):
   return e
 
 import math
+
+
 def check_int_range(loglimit):
   a=math.pow(58,loglimit)
   b=0
