@@ -7,7 +7,7 @@ dust=5461*0.00000001
 max_op_length=37
 
 
-def make_raw_one_input(fromaddress,amount,destination,fee, specific_inputs):  #NEEDS REWORKING
+def make_raw_one_input(fromaddress, amount, destination, fee, specific_inputs):  #NEEDS REWORKING
   global ins, outs, totalin
   fee=int(fee*100000000)
   amount=int(amount*100000000)
@@ -32,13 +32,13 @@ def make_raw_one_input(fromaddress,amount,destination,fee, specific_inputs):  #N
     outs.append({'value': amount, 'address': destination})
   extra=totalin-amount-fee
   if extra>=dust*100000000:
-    outs.append({'value':extra, 'address':fromaddress})
+    outs.append({'value': extra, 'address': fromaddress})
 
 
-  tx=mktx(ins,outs)
+  tx=mktx(ins, outs)
   return tx
 
-def make_raw(fromaddress,destination,fee):  #TAILORED FOR THIS SPECIFIC USE CASE
+def make_raw(fromaddress, destination, fee):  #TAILORED FOR THIS SPECIFIC USE CASE
   global ins, outs, totalin
   fee=int(fee*100000000)
   unspents=addresses.unspent(fromaddress)
@@ -59,7 +59,7 @@ def make_raw(fromaddress,destination,fee):  #TAILORED FOR THIS SPECIFIC USE CASE
   if totalin>=fee+int(dust*100000000):
     outs.append({'value': totalin-fee, 'address': destination})
 
-  tx=mktx(ins,outs)
+  tx=mktx(ins, outs)
   return tx
 
 
@@ -91,7 +91,7 @@ def add_op_return(unsigned_raw_tx, message, position_n):
   if position_n>=len(deserialized_tx['outs']):
     deserialized_tx['outs'].append(newoutput)
   else:
-    deserialized_tx['outs'].insert(position_n,newoutput)
+    deserialized_tx['outs'].insert(position_n, newoutput)
   #deserialized_tx['outs'].append(newoutput)
 
   reserialized_tx=serialize(deserialized_tx)
@@ -104,14 +104,14 @@ def sign_tx(unsigned_raw_tx, privatekey):
   detx=deserialize(tx2)
   input_length=len(detx['ins'])
 
-  for i in range(0,input_length):
-    tx2=sign(tx2,i,privatekey)
+  for i in range(0, input_length):
+    tx2=sign(tx2, i, privatekey)
 
   return tx2
 
 def pushtx(rawtx):
   print "Trying to push: "+ str(rawtx)
-  response=node.connect('sendrawtransaction',[rawtx])
+  response=node.connect('sendrawtransaction', [rawtx])
   print "Push Response was "+str(response)
 
   return response
@@ -125,8 +125,8 @@ def send_op_return(fromaddr, dest, fee, message, privatekey, specific_inputs):
   amt=dust
   tx=make_raw_one_input(fromaddr, amt, dest, fee, specific_inputs)
 
-  tx2=add_op_return(tx,message,1)
-  tx3=sign_tx(tx2,privatekey)
+  tx2=add_op_return(tx, message, 1)
+  tx3=sign_tx(tx2, privatekey)
   print tx3
   response=pushtx(tx3)
   #response=''
@@ -138,9 +138,9 @@ def send_op_return(fromaddr, dest, fee, message, privatekey, specific_inputs):
 
 def make_raw_multiple_outputs(fromaddress, output_n, output_amount_each, destination, fee):
 
-  global ins, outs,h, tx, tx2, outputs
+  global ins, outs, h, tx, tx2, outputs
   outputs=[]
-  for i in range(0,output_n):
+  for i in range(0, output_n):
     outputs.append({'value': int(output_amount_each*100000000), 'address': destination})
 
   fee=int(fee*100000000)
@@ -168,7 +168,7 @@ def make_raw_multiple_outputs(fromaddress, output_n, output_amount_each, destina
   print 'outs'
   print outs
 
-  tx=mktx(ins,outs)
+  tx=mktx(ins, outs)
 
   return tx
 
@@ -177,7 +177,7 @@ def make_multiple_outputs(fromaddress, privatekey, output_n, value_each,  total_
   tx2=sign_tx(tx, privatekey)
   response=pushtx(tx2)
   free_outputs=[]
-  for i in range(0,output_n):
+  for i in range(0, output_n):
     outputdata={}
     outputdata['output']=str(response)+":"+str(i)
     outputdata['value']= int(value_each*100000000)
@@ -196,7 +196,7 @@ def declaration_tx(fromaddr, fee_each, privatekey, message):
   value_each=fee_each
   specific_inputs=make_multiple_outputs(fromaddr, privatekey, n_transactions+1, value_each, fee_each)
 
-  for n in range(0,n_transactions):
+  for n in range(0, n_transactions):
     if continu:
       indexstart=max_op_length*n
       indexend=indexstart+max_op_length
@@ -208,7 +208,7 @@ def declaration_tx(fromaddr, fee_each, privatekey, message):
       print ""
       submessage=str(n)+" "+message[indexstart:indexend]
       #print submessage
-      r=send_op_return(fromaddr, profit_address, fee_each, submessage, privatekey,specific_input)
+      r=send_op_return(fromaddr, profit_address, fee_each, submessage, privatekey, specific_input)
 
       if r is None:
         continu=False
@@ -218,4 +218,4 @@ def declaration_tx(fromaddr, fee_each, privatekey, message):
 
 
 m='Celebrimbor was the son of Curufin, fifth son of F\xc3\xabanor and Nerdanel.'
-declaration_tx(addresses.generate_publicaddress('Andrew1Barisser'), 0.00004, addresses.generate_privatekey('Andrew1Barisser'),m)
+declaration_tx(addresses.generate_publicaddress('Andrew1Barisser'), 0.00004, addresses.generate_privatekey('Andrew1Barisser'), m)
