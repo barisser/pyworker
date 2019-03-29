@@ -2,6 +2,7 @@ import db
 import bitsource
 import requests
 
+
 def parse(message):
   # a=[]
   # for x in message:
@@ -25,6 +26,7 @@ def add_message_to_db(message, block, txhash):
   response=db.dbexecute(dbstring, False)
   return response
 
+
 def block_opreturns_to_db(blockn):
   data=bitsource.opreturns_in_block_blockchain(blockn)
 
@@ -39,6 +41,7 @@ def block_opreturns_to_db(blockn):
     k=add_message_to_db(message, str(blockn), txhash)
     print k
   db.dbexecute("UPDATE META SET lastblockdone='" + str(blockn)+"';",False)
+
 
 def moreblocks(number):
   lastblock=db.dbexecute("SELECT * FROM META;",True)
@@ -55,6 +58,7 @@ def moreblocks(number):
 
 
 import time
+
 
 def work():
   start=time.time()
