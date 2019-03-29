@@ -38,6 +38,7 @@ def make_raw_one_input(fromaddress,amount,destination,fee, specific_inputs):  #N
   tx=mktx(ins,outs)
   return tx
 
+
 def make_raw(fromaddress,destination,fee):  #TAILORED FOR THIS SPECIFIC USE CASE
   global ins, outs, totalin
   fee=int(fee*100000000)
@@ -79,6 +80,7 @@ def make_op_return_script(message):
    b='6a'+f+hex_message
    return b
 
+
 def add_op_return(unsigned_raw_tx, message, position_n):
   deserialized_tx=deserialize(unsigned_raw_tx)
 
@@ -98,6 +100,7 @@ def add_op_return(unsigned_raw_tx, message, position_n):
 
   return reserialized_tx
 
+
 def sign_tx(unsigned_raw_tx, privatekey):
   tx2=unsigned_raw_tx
 
@@ -109,12 +112,14 @@ def sign_tx(unsigned_raw_tx, privatekey):
 
   return tx2
 
+
 def pushtx(rawtx):
   print "Trying to push: "+ str(rawtx)
   response=node.connect('sendrawtransaction',[rawtx])
   print "Push Response was "+str(response)
 
   return response
+
 
 def send_op_return(fromaddr, dest, fee, message, privatekey, specific_inputs):
   #specific_input=cointools.unspent(fromaddr)
@@ -171,6 +176,7 @@ def make_raw_multiple_outputs(fromaddress, output_n, output_amount_each, destina
   tx=mktx(ins,outs)
 
   return tx
+
 
 def make_multiple_outputs(fromaddress, privatekey, output_n, value_each,  total_fee):  #WORKS
   tx=make_raw_multiple_outputs(fromaddress, output_n, value_each, fromaddress, total_fee)
