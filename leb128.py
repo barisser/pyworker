@@ -35,14 +35,14 @@ def make_batches(n):
   g=7-g
   if g==7:
     g=0
-  for i in range(0,g):
+  for i in range(0, g):
     b='0'+str(b)
 
   output=[]
 
   while len(b)>0:
     r=''
-    for i in range(0,7):
+    for i in range(0, 7):
       r=r+b[i]
     output.append(r)
     if len(b)>7:
@@ -78,7 +78,7 @@ def hexencode(n):
   a=encode(n)
   g=''
   for x in a:
-    r=hex(int(x,2))
+    r=hex(int(x, 2))
     if len(r)==3:
       q=r[0:2]
       q=q+'0'+r[2]
@@ -92,14 +92,14 @@ def decode(n):
   for x in n:
     r=x[1:len(x)]
     a=r+a
-  return int(a,2)
+  return int(a, 2)
 
 def hexpiecetobinary(hex):
   #print hex
   try:
-    a=bin(int(hex,16))[2:].zfill(8)
+    a=bin(int(hex, 16))[2:].zfill(8)
   except:
-    a=bin(int(hex.encode('hex'),16)).zfill(8)
+    a=bin(int(hex.encode('hex'), 16)).zfill(8)
   #a=a[2:len(a)]
   #g=8-len(a)
   #for i in range(0,g):
