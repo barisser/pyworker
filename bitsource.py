@@ -7,18 +7,18 @@ import cointools
 
 def getblockmeta(n):
   #get hash of block at height n
-  blockhash=node.connect('getblockhash',[n])
+  blockhash=node.connect('getblockhash', [n])
 
-  blockdata=node.connect('getblock',[blockhash])
+  blockdata=node.connect('getblock', [blockhash])
   return blockdata
 
 def getrawtx(txhash):
-  txdata=node.connect('getrawtransaction',[txhash])
+  txdata=node.connect('getrawtransaction', [txhash])
   return txdata
 
 def tx_lookup(txhash):
    #print txhash
-   c=node.connect('getrawtransaction',[txhash,1])
+   c=node.connect('getrawtransaction', [txhash, 1])
    return c
 
 def tx_inputs(txhash):
@@ -30,9 +30,9 @@ def tx_inputs(txhash):
   prevtxids=[]
   for x in txins:
     if 'txid' in x: #is normal transaction, not automatic block reward
-      prevtxids.append([x['txid'],x['vout']])
+      prevtxids.append([x['txid'], x['vout']])
     else:
-      height=node.connect('getblock',[txdata['blockhash']])['height']
+      height=node.connect('getblock', [txdata['blockhash']])['height']
       prevtxids.append(height)
       automatic=True
 
@@ -114,7 +114,7 @@ def op_return_in_block(n):
     n=read_tx(tx)
     m=n[0]
     if not m==-1:
-      messages.append([tx,m,n[1]])
+      messages.append([tx, m, n[1]])
   return messages
 
 def opreturns_in_block_blockchain(n):
@@ -131,11 +131,11 @@ def opreturns_in_block_blockchain(n):
       if script[0:2]=="6a":
         script=script[4:len(script)]
         script=script.decode("hex")
-        answers.append([tx['hash'],script])
+        answers.append([tx['hash'], script])
   return answers
 
 def parse_colored_tx(metadata, txhash_with_index):
-  global d,e,g, count,f, hexmetadata
+  global d, e, g, count, f, hexmetadata
   hexmetadata=metadata.encode('hex')
   opcode=metadata[0:2]
   results={}
@@ -175,7 +175,7 @@ def parse_colored_tx(metadata, txhash_with_index):
       txdata=tx_lookup(txhash)
       txoutputs=txdata['vout']
       results['issued']=[]
-      for i in range(0,markerposition):
+      for i in range(0, markerposition):
         h={}
         h['quantity']=results['asset_quantities'][i]
 
@@ -227,7 +227,7 @@ def write_metadata(asset_quantities, otherdata):
     encoded=leb128.encode(asset)
     j=''
     for x in encoded:
-      r=str(hex(int(x,2)))
+      r=str(hex(int(x, 2)))
       if len(r)==3:
         r='0'+r[2:3]
       else:
@@ -278,7 +278,7 @@ def oa_tx(txid, inputcolors):
 
     #Describe Issuing Outputs
     result['issued']=[]
-    for i in range(0,markerposition):
+    for i in range(0, markerposition):
       k={}
       amt= result['meta']['asset_quantities'][i]
       k['amount']=amt
@@ -289,7 +289,7 @@ def oa_tx(txid, inputcolors):
 
     #Describe Transfer Outputs
     result['transferred']=[]
-    for i in range(markerposition,len(txdata['vout'])):
+    for i in range(markerposition, len(txdata['vout'])):
       k={}
       supposedamt= result['meta']['assetquantities'][i]  #MIGHT BE WRONG i
       k['color_address']=''
@@ -331,7 +331,7 @@ def oa_in_block(n):
       r['txid']= txdata['txid']
 
       r['issued']=[]
-      for i in range(0,markerposition):
+      for i in range(0, markerposition):
         k={}
         amt= r['meta']['asset_quantities'][i]
         k['amount']=amt
