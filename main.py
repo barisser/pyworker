@@ -23,7 +23,7 @@ def something():
 @app.route('/txs/<tx>')  #WORKS
 def tx_query(tx=None):
   dbstring="SELECT * FROM messages WHERE txhash='"+tx+"';"
-  results=db.dbexecute(dbstring,True)
+  results=db.dbexecute(dbstring, True)
   results=json.dumps(results)
   response=make_response(str(results), 200)
   response.headers['Access-Control-Allow-Origin']= '*'
@@ -33,7 +33,7 @@ def tx_query(tx=None):
 @app.route('/blocks/<block>')  #WORKS
 def block_query(block=None):
   dbstring="SELECT * FROM messages where block='"+block+"';"
-  results=db.dbexecute(dbstring,True)
+  results=db.dbexecute(dbstring, True)
   results=json.dumps(results)
   response=make_response(str(results), 200)
   response.headers['Access-Control-Allow-Origin']= '*'
@@ -43,7 +43,7 @@ def block_query(block=None):
 @app.route('/messages/<lastn>')  #WORKS
 def messages_query(lastn=None):
   dbstring="SELECT * FROM messages ORDER BY block DESC;"
-  results=db.dbexecute(dbstring,True)
+  results=db.dbexecute(dbstring, True)
   lastn=int(lastn)
   results=results[0:lastn]
   results=json.dumps(results)
